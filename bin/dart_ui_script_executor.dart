@@ -4,7 +4,11 @@ import 'package:process_run/shell.dart';
 const String testName = "Executing target script via widget test";
 const String targetScriptName = "target";
 
-String testCode() {
+String testCode(List<String> targetArgs) {
+  final String args = targetArgs.isEmpty 
+    ? "" 
+    : "[${targetArgs.map((a) => "'$a'").join(',')}]";
+
   return 
 '''
 import 'dart:io';
@@ -21,14 +25,14 @@ void main() {
 
   testWidgets('$testName', (WidgetTester tester) async {
     await tester.runAsync(() async {
-      await $targetScriptName.main();
+      await $targetScriptName.main($args);
     });
   });
 }
 ''';
 }
 
-Future main(args) async {
+Future main(List<String> args) async {
   final dir = await Directory.systemTemp.createTemp("dart_ui_script_executor");
 
   try {
@@ -38,7 +42,7 @@ Future main(args) async {
 
     print("Creating a test that will execute the script.");
     final testFile = File('${dir.path}/test.dart');
-    await testFile.writeAsString(testCode());
+    await testFile.writeAsString(testCode(args.sublist(1)));
 
     print("Running the test.");
     await Shell().run('flutter test ${testFile.path}');
