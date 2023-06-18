@@ -1,0 +1,21 @@
+name: dart_ui_script_executor
+description: Provides an ability to execute dart scripts that have Flutter-specific dependencies.
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  process_run: ^0.13.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
